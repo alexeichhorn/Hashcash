@@ -53,13 +53,14 @@ public struct Stamp {
         }
     }
     
-    enum ParseError: Error {
+    public enum ParseError: Error {
         case incompatibleVersion
         case invalidComponentsCount
         case invalidBits
         case invalidTimestampFormat
     }
     
+    /// - parameter encodedValue: expects a value like "1:20:210324:hello::gemqijJM/8VRm6ij:1C2EB1"
     public init(encodedValue: String) throws {
         let components = encodedValue.components(separatedBy: ":")
         
