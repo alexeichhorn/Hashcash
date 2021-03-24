@@ -13,26 +13,10 @@ public struct Hashcash {
     public let ver = "1"
     public var bits: UInt = 20
     public var saltLength: UInt = 16
-    public var datePrecision: DatePrecision = .days
-    
-    public enum DatePrecision {
-        case days
-        case minutes
-        case seconds
-        
-        var dateFormatter: DateFormatter {
-            let dateFormatter = DateFormatter()
-            switch self {
-            case .days: dateFormatter.dateFormat = "yyMMdd"
-            case .minutes: dateFormatter.dateFormat = "yyMMddHHmm"
-            case .seconds: dateFormatter.dateFormat = "yyMMddHHmmss"
-            }
-            return dateFormatter
-        }
-    }
+    public var datePrecision: Stamp.DatePrecision = .days
     
     
-    public func mint(resource: String, ext: String = "", date: Date = Date()) -> String {
+    public func mint(resource: String, ext: String = "", date: Date = Date()) -> Stamp {
         
         let timestamp = datePrecision.dateFormatter.string(from: date)
         let salt = generateSalt()
@@ -47,7 +31,7 @@ public struct Hashcash {
             let digest = SHA256.hash(data: stamp.data(using: .utf8)!)
             
             if digest.isZeroPrefixed(withBits: bits) {
-                return stamp
+                return Stamp(bits: bits, resource: resource, ext: ext, salt: salt, counter: encodedCounter, date: date, datePrecision: datePrecision, encodedValue: stamp)
             }
             
             counter += 1
