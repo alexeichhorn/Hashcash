@@ -4,9 +4,9 @@ import XCTest
 final class HashcashTests: XCTestCase {
     
     func testExample() {
-        let hashcash = Hashcash()
+        let hashcash = Hashcash(bits: 22, datePrecision: .seconds)
         
-        let stamp = hashcash.mint(resource: "hello")
+        let stamp = hashcash.mint(resource: "test")
         print(stamp)
         XCTAssertNotNil(stamp)
     }
@@ -30,8 +30,28 @@ final class HashcashTests: XCTestCase {
         // TODO: check date
         
     }
+    
+    func testStampCheck() {
+        
+        let hashcash = Hashcash(bits: 22)
+        let stamp = try! Stamp(encodedValue: "1:22:210325:test::CAXaidriI2b2oYhh:5C901")
+        
+        let comparingDate = Date(timeIntervalSince1970: 1616629155)
+        XCTAssertTrue(hashcash.check(stamp: stamp, resource: "test", currentDate: comparingDate))
+        
+        let secondStamp = try! Stamp(encodedValue: "1:22:210325003802:test::5CwGOLBtiowpxjkW:19DE17")
+        
+        XCTAssertTrue(hashcash.check(stamp: secondStamp, currentDate: comparingDate))
+        
+        let secondInvalidDate = Date(timeIntervalSince1970: 1616628834)
+        XCTAssertTrue(hashcash.check(stamp: stamp, currentDate: secondInvalidDate))
+        XCTAssertFalse(hashcash.check(stamp: secondStamp, currentDate: secondInvalidDate))
+        
+    }
 
     static var allTests = [
         ("testExample", testExample),
+        ("testStampParser", testStampParser),
+        ("testStampCheck", testStampCheck)
     ]
 }

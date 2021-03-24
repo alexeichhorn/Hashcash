@@ -43,6 +43,14 @@ public struct Stamp {
             default: return nil
             }
         }
+        
+        var defaultTimeTolerance: TimeInterval {
+            switch self {
+            case .days: return 48 * 3600
+            case .minutes: return 5 * 60
+            case .seconds: return 2 * 60
+            }
+        }
     }
     
     enum ParseError: Error {
