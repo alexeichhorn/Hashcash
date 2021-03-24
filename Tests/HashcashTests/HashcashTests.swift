@@ -2,11 +2,13 @@ import XCTest
 @testable import Hashcash
 
 final class HashcashTests: XCTestCase {
+    
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Hashcash().text, "Hello, World!")
+        let hashcash = Hashcash()
+        
+        let stamp = hashcash.mint(resource: "hello")
+        print(stamp)
+        XCTAssertNotNil(stamp)
     }
 
     static var allTests = [
