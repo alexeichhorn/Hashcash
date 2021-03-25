@@ -28,3 +28,6 @@ hashcash.check(stamp: stamp)  // -> Bool
 The `Hashcash` object contains among other things information about how hard the challenge should be and the hash algorithm to use. Increase `bits` to make the challenge harder (default: 20). Each increment by one, doubles the difficulty and therefore the time it takes:
 ```
 let harderHashcash = Hashcash(bits: 22)  // 4x as hard as default
+```
+
+**Note:** UTC date time is used when creating and validating stamps
