@@ -23,6 +23,18 @@ public struct Hashcash {
     }
     
     
+    /// - parameter bits: determines difficulty of proof (increment by one, doubles difficulty)
+    /// - parameter saltLength: determines length of random salt generated for each stamp
+    /// - parameter datePrecision: defines how exact the current date is specified
+    /// - parameter algorithm: hashing algorithm used to proof the work (must match on validation part)
+    public init(bits: UInt = 20, saltLength: UInt = 16, datePrecision: Stamp.DatePrecision = .days, algorithm: Hashcash.Algorithm = .sha256) {
+        self.bits = bits
+        self.saltLength = saltLength
+        self.datePrecision = datePrecision
+        self.algorithm = algorithm
+    }
+    
+    
     /// Mints a new hashcash stamp
     /// - parameter resource: main data you want to proof you have "worked for". It musn't contain any ":" characters
     /// - parameter ext: additional data
