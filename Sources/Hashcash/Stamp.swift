@@ -27,6 +27,7 @@ public struct Stamp {
         
         var dateFormatter: DateFormatter {
             let dateFormatter = DateFormatter()
+            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
             switch self {
             case .days: dateFormatter.dateFormat = "yyMMdd"
             case .minutes: dateFormatter.dateFormat = "yyMMddHHmm"

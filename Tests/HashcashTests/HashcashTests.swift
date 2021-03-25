@@ -36,14 +36,14 @@ final class HashcashTests: XCTestCase {
         let hashcash = Hashcash(bits: 22)
         let stamp = try! Stamp(encodedValue: "1:22:210325:test::CAXaidriI2b2oYhh:5C901")
         
-        let comparingDate = Date(timeIntervalSince1970: 1616629155)
+        let comparingDate = Date(timeIntervalSince1970: 1616632737)
         XCTAssertTrue(hashcash.check(stamp: stamp, resource: "test", currentDate: comparingDate))
         
         let secondStamp = try! Stamp(encodedValue: "1:22:210325003802:test::5CwGOLBtiowpxjkW:19DE17")
         
         XCTAssertTrue(hashcash.check(stamp: secondStamp, currentDate: comparingDate))
         
-        let secondInvalidDate = Date(timeIntervalSince1970: 1616628834)
+        let secondInvalidDate = Date(timeIntervalSince1970: 1616633157)
         XCTAssertTrue(hashcash.check(stamp: stamp, currentDate: secondInvalidDate))
         XCTAssertFalse(hashcash.check(stamp: secondStamp, currentDate: secondInvalidDate))
         
@@ -54,7 +54,7 @@ final class HashcashTests: XCTestCase {
         let hashcash = Hashcash(bits: 22)
         let stamp = try! Stamp(encodedValue: "1:22:210325:test::CAXaidriI2b2oYhh:5C902")
         
-        let comparingDate = Date(timeIntervalSince1970: 1616629155)
+        let comparingDate = Date(timeIntervalSince1970: 1616632737)
         XCTAssertFalse(hashcash.check(stamp: stamp, currentDate: comparingDate))
         
     }
