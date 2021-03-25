@@ -49,6 +49,16 @@ final class HashcashTests: XCTestCase {
         
     }
     
+    func testInvalidStampCheck() {
+        
+        let hashcash = Hashcash(bits: 22)
+        let stamp = try! Stamp(encodedValue: "1:22:210325:test::CAXaidriI2b2oYhh:5C902")
+        
+        let comparingDate = Date(timeIntervalSince1970: 1616629155)
+        XCTAssertFalse(hashcash.check(stamp: stamp, currentDate: comparingDate))
+        
+    }
+    
     func testMintSHA256DefaultSpeed() {
         let hashcash = Hashcash()
         measure {
@@ -81,6 +91,7 @@ final class HashcashTests: XCTestCase {
         ("testExample", testExample),
         ("testStampParser", testStampParser),
         ("testStampCheck", testStampCheck),
+        ("testInvalidStampCheck", testInvalidStampCheck),
         ("testMintSHA256DefaultSpeed", testMintSHA256DefaultSpeed),
         ("testMintSHA256FastSpeed", testMintSHA256FastSpeed),
         ("testMintSHA1DefaultSpeed", testMintSHA1DefaultSpeed),
