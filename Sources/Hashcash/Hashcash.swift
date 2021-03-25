@@ -15,6 +15,13 @@ public struct Hashcash {
     public var saltLength: UInt = 16
     public var datePrecision: Stamp.DatePrecision = .days
     
+    public var algorithm: Algorithm = .sha256
+    
+    public enum Algorithm {
+        case sha256
+        case sha1
+    }
+    
     
     /// Mints a new hashcash stamp
     /// - parameter resource: main data you want to proof you have "worked for". It musn't contain any ":" characters
@@ -32,9 +39,7 @@ public struct Hashcash {
             let encodedCounter = String(format: "%2X", counter).trimmingCharacters(in: .whitespaces)
             let stamp = challenge + ":" + encodedCounter
             
-            let digest = SHA256.hash(data: stamp.data(using: .utf8)!)
-            
-            if digest.isZeroPrefixed(withBits: bits) {
+            if isDigestZeroPrefixed(stamp, withBits: bits) {
                 return Stamp(bits: bits, resource: resource, ext: ext, salt: salt, counter: encodedCounter, date: date, datePrecision: datePrecision, encodedValue: stamp)
             }
             
@@ -58,9 +63,7 @@ public struct Hashcash {
             return false // computational effort to low
         }
         
-        let digest = SHA256.hash(data: stamp.encodedValue.data(using: .utf8)!)
-        
-        guard digest.isZeroPrefixed(withBits: stamp.bits) else {
+        guard isDigestZeroPrefixed(stamp.encodedValue, withBits: stamp.bits) else {
             return false // work not proven
         }
         
@@ -75,6 +78,18 @@ public struct Hashcash {
         return true
     }
     
+    
+    private func isDigestZeroPrefixed(_ stamp: String, withBits bits: UInt) -> Bool {
+        switch algorithm {
+        case .sha256:
+            let digest = SHA256.hash(data: stamp.data(using: .utf8)!)
+            return digest.isZeroPrefixed(withBits: bits)
+            
+        case .sha1:
+            let digest = Insecure.SHA1.hash(data: stamp.data(using: .utf8)!)
+            return digest.isZeroPrefixed(withBits: bits)
+        }
+    }
     
     
     private func generateSalt() -> String {
