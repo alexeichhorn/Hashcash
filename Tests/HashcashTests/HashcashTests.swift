@@ -48,10 +48,42 @@ final class HashcashTests: XCTestCase {
         XCTAssertFalse(hashcash.check(stamp: secondStamp, currentDate: secondInvalidDate))
         
     }
+    
+    func testMintSHA256DefaultSpeed() {
+        let hashcash = Hashcash()
+        measure {
+            _ = hashcash.mint(resource: "speedtest")
+        }
+    }
+    
+    func testMintSHA256FastSpeed() {
+        let hashcash = Hashcash(bits: 15)
+        measure {
+            _ = hashcash.mint(resource: "fastSpeedtest")
+        }
+    }
+    
+    func testMintSHA1DefaultSpeed() {
+        let hashcash = Hashcash(algorithm: .sha1)
+        measure {
+            _ = hashcash.mint(resource: "speedtest")
+        }
+    }
+    
+    func testMintSHA1FastSpeed() {
+        let hashcash = Hashcash(bits: 15, algorithm: .sha1)
+        measure {
+            _ = hashcash.mint(resource: "fastSpeedtest")
+        }
+    }
 
     static var allTests = [
         ("testExample", testExample),
         ("testStampParser", testStampParser),
-        ("testStampCheck", testStampCheck)
+        ("testStampCheck", testStampCheck),
+        ("testMintSHA256DefaultSpeed", testMintSHA256DefaultSpeed),
+        ("testMintSHA256FastSpeed", testMintSHA256FastSpeed),
+        ("testMintSHA1DefaultSpeed", testMintSHA1DefaultSpeed),
+        ("testMintSHA1FastSpeed", testMintSHA1FastSpeed)
     ]
 }
